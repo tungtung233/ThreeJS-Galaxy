@@ -22,6 +22,7 @@ const galaxyParameters = {};
 galaxyParameters.count = 100000;
 galaxyParameters.size = 0.02;
 galaxyParameters.radius = 5;
+galaxyParameters.branches = 3;
 
 let geometry = null;
 let material = null;
@@ -45,7 +46,7 @@ const generateGalaxy = () => {
 
     const radius = Math.random() * galaxyParameters.radius;
     const branchAngle =
-      ((i % 3) / 3) *
+      ((i % galaxyParameters.branches) / galaxyParameters.branches) *
       Math.PI *
       2;
 
@@ -90,6 +91,13 @@ gui
   .min(0.01)
   .max(20)
   .step(0.01)
+  .onFinishChange(generateGalaxy);
+
+gui
+  .add(galaxyParameters, 'branches')
+  .min(2)
+  .max(20)
+  .step(1)
   .onFinishChange(generateGalaxy);
 
 /**
