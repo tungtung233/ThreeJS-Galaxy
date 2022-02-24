@@ -47,6 +47,9 @@ const generateGalaxy = () => {
   const positions = new Float32Array(galaxyParameters.count * 3);
   const colors = new Float32Array(galaxyParameters.count * 3); // color attribute also needs 3 values - rgb
 
+  const insideColor = new THREE.Color(galaxyParameters.insideColor);
+  const outsideColor = new THREE.Color(galaxyParameters.outsideColor);
+
   for (let i = 0; i < galaxyParameters.count; i++) {
     const i3 = i * 3;
 
@@ -73,9 +76,18 @@ const generateGalaxy = () => {
     positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
     // Color
-    colors[i3] = 1;
-    colors[i3 + 1] = 0;
-    colors[i3 + 2] = 0;
+    // lerp -> lerp will take the base color, then take it's first argument and interpolate between the two, depending on the second arguments value.
+    // E.g. blue.lerp(red, 0) -> it will be completely blue
+    //      blue.lerp(red, 1) -> it will be completely red
+    //      blue.lerp(red, 0.5) -> it will be 50% blue, 50% red = purple
+    // however, after using lerp, the original value (in this case 'blue') will get modified to it's new interpolated value, hence why we are cloning insideColor first, so when we go to use mixedColor the second time, it is still taking from 'insideColor', rather than a modified color value from the first loop
+
+    const mixedColor = insideColor.clone();
+    mixedColor.lerp(outsideColor, radius / galaxyParameters.radius);
+
+    colors[i3] = mixedColor.r;
+    colors[i3 + 1] = mixedColor.g;
+    colors[i3 + 2] = mixedColor.b;
   }
 
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
