@@ -25,6 +25,7 @@ galaxyParameters.radius = 5;
 galaxyParameters.branches = 3;
 galaxyParameters.spin = 1;
 galaxyParameters.randomness = 0.2;
+galaxyParameters.randomnessPower = 3;
 
 let geometry = null;
 let material = null;
@@ -53,9 +54,15 @@ const generateGalaxy = () => {
       Math.PI *
       2;
 
-    const randomX = (Math.random() - 0.5) * galaxyParameters.randomness;
-    const randomY = (Math.random() - 0.5) * galaxyParameters.randomness;
-    const randomZ = (Math.random() - 0.5) * galaxyParameters.randomness;
+    const randomX =
+      Math.pow(Math.random(), galaxyParameters.randomnessPower) *
+      (Math.random() < 0.5 ? 1 : -1); // ternary operator was used to randomly make this value positive or negative, else all values would be positive
+    const randomY =
+      Math.pow(Math.random(), galaxyParameters.randomnessPower) *
+      (Math.random() < 0.5 ? 1 : -1);
+    const randomZ =
+      Math.pow(Math.random(), galaxyParameters.randomnessPower) *
+      (Math.random() < 0.5 ? 1 : -1);
 
     positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
     positions[i3 + 1] = randomY;
@@ -118,6 +125,13 @@ gui
   .add(galaxyParameters, 'randomness')
   .min(0)
   .max(2)
+  .step(0.001)
+  .onFinishChange(generateGalaxy);
+
+gui
+  .add(galaxyParameters, 'randomnessPower')
+  .min(1)
+  .max(10)
   .step(0.001)
   .onFinishChange(generateGalaxy);
 
