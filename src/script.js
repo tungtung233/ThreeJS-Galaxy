@@ -48,10 +48,23 @@ const generateGalaxy = () => {
 
   // Points
   const points = new THREE.Points(geometry, material);
-  scene.add(points)
+  scene.add(points);
 };
 
 generateGalaxy();
+
+gui
+  .add(galaxyParameters, 'count')
+  .min(100)
+  .max(1000000)
+  .step(100)
+  .onFinishChange(generateGalaxy);
+gui
+  .add(galaxyParameters, 'size')
+  .min(0.001)
+  .max(0.1)
+  .step(0.001)
+  .onFinishChange(generateGalaxy);
 
 /**
  * Sizes
