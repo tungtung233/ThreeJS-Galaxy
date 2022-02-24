@@ -43,11 +43,15 @@ const generateGalaxy = () => {
   for (let i = 0; i < galaxyParameters.count; i++) {
     const i3 = i * 3;
 
-    const radius = Math.random() * galaxyParameters.radius
+    const radius = Math.random() * galaxyParameters.radius;
+    const branchAngle =
+      ((i % 3) / 3) *
+      Math.PI *
+      2;
 
-    positions[i3] = radius
-    positions[i3 + 1] = 0
-    positions[i3 + 2] = 0
+    positions[i3] = Math.cos(branchAngle) * radius;
+    positions[i3 + 1] = 0;
+    positions[i3 + 2] = Math.sin(branchAngle) * radius;
   }
 
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
