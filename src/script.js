@@ -93,7 +93,7 @@ const generateGalaxy = () => {
     colors[i3 + 2] = mixedColor.b;
 
     // Scale
-    scales[i] = Math.random()
+    scales[i] = Math.random();
   }
 
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -108,7 +108,7 @@ const generateGalaxy = () => {
     vertexShader: galaxyVertexShader,
     fragmentShader: galaxyFragmentShader,
     uniforms: {
-      uSize: { value: 8 },
+      uSize: { value: 2 * renderer.getPixelRatio() },
     },
   });
 
@@ -116,8 +116,6 @@ const generateGalaxy = () => {
   points = new THREE.Points(geometry, material);
   scene.add(points);
 };
-
-generateGalaxy();
 
 gui
   .add(galaxyParameters, 'count')
@@ -221,6 +219,9 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// Generate the galaxy
+generateGalaxy();
 
 /**
  * Animate
