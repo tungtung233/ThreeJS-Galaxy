@@ -23,7 +23,7 @@ galaxyParameters.count = 100000;
 galaxyParameters.size = 0.02;
 galaxyParameters.radius = 5;
 galaxyParameters.branches = 3;
-galaxyParameters.spin = 1;
+galaxyParameters.spin = 0;
 galaxyParameters.randomness = 0.2;
 galaxyParameters.randomnessPower = 3;
 galaxyParameters.insideColor = '#ff6030';
@@ -94,12 +94,28 @@ const generateGalaxy = () => {
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
   // Material
-  material = new THREE.PointsMaterial({
-    size: galaxyParameters.size,
-    sizeAttenuation: true,
+  material = new THREE.ShaderMaterial({
     depthWrite: false,
     blending: THREE.AdditiveBlending,
     vertexColors: true,
+    vertexShader: `
+      void main() {
+        // Position
+        vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+        vec4 viewPosition = viewMatrix * modelPosition;
+        vec4 projectionPosition = projectionMatrix * viewPosition;
+
+        gl_Position = projectionPosition;
+
+        // Size
+        gl_PointSize = 1.0;
+      }
+    `,
+    fragmentShader: `
+    void main() {
+      gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+    `
   });
 
   // Points
