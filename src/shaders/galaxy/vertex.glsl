@@ -12,4 +12,7 @@ void main() {
 
   // Size
   gl_PointSize = uSize * aScale;
+
+  // Add size attenuation - particles close to camera are bigger, particles further are smaller -> simulates perspective
+  gl_PointSize *= ( 1.0 / - viewPosition.z );
 }
