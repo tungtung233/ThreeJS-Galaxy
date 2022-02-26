@@ -59,26 +59,31 @@ const generateGalaxy = () => {
 
     // Position
     const radius = Math.random() * galaxyParameters.radius;
-    const spinAngle = radius * galaxyParameters.spin;
     const branchAngle =
       ((i % galaxyParameters.branches) / galaxyParameters.branches) *
       Math.PI *
       2;
 
-    positions[i3] = Math.cos(branchAngle + spinAngle) * radius;
+    positions[i3] = Math.cos(branchAngle) * radius;
     positions[i3 + 1] = 0;
-    positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius;
+    positions[i3 + 2] = Math.sin(branchAngle) * radius;
 
     // Randomness
     const randomX =
       Math.pow(Math.random(), galaxyParameters.randomnessPower) *
-      (Math.random() < 0.5 ? 1 : -1); // ternary operator was used to randomly make this value positive or negative, else all values would be positive
+      (Math.random() < 0.5 ? 1 : -1) *
+      galaxyParameters.randomness *
+      radius; // ternary operator was used to randomly make this value positive or negative, else all values would be positive
     const randomY =
       Math.pow(Math.random(), galaxyParameters.randomnessPower) *
-      (Math.random() < 0.5 ? 1 : -1);
+      (Math.random() < 0.5 ? 1 : -1) *
+      galaxyParameters.randomness *
+      radius;
     const randomZ =
       Math.pow(Math.random(), galaxyParameters.randomnessPower) *
-      (Math.random() < 0.5 ? 1 : -1);
+      (Math.random() < 0.5 ? 1 : -1) *
+      galaxyParameters.randomness *
+      radius;
 
     randomness[i3] = randomX;
     randomness[i3 + 1] = randomY;
@@ -105,8 +110,10 @@ const generateGalaxy = () => {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1)); // 'a' for attribute
-  geometry.setAttribute('aRandomness', new THREE.BufferAttribute(randomness, 3));
-  
+  geometry.setAttribute(
+    'aRandomness',
+    new THREE.BufferAttribute(randomness, 3)
+  );
 
   // Material
   material = new THREE.ShaderMaterial({
@@ -152,13 +159,6 @@ gui
   .min(2)
   .max(20)
   .step(1)
-  .onFinishChange(generateGalaxy);
-
-gui
-  .add(galaxyParameters, 'spin')
-  .min(-5)
-  .max(5)
-  .step(0.001)
   .onFinishChange(generateGalaxy);
 
 gui
