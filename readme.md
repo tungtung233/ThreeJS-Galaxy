@@ -1,4 +1,5 @@
-# Three.js Journey
+# Galaxy - Three.js Journey
+This project was completed with the goal of understanding how to use and animate particles in ThreeJS.
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
