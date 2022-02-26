@@ -22,7 +22,6 @@ const scene = new THREE.Scene();
  */
 const galaxyParameters = {};
 galaxyParameters.count = 100000;
-galaxyParameters.size = 0.02;
 galaxyParameters.radius = 5;
 galaxyParameters.branches = 3;
 galaxyParameters.spin = 0;
@@ -138,13 +137,6 @@ gui
   .min(100)
   .max(1000000)
   .step(100)
-  .onFinishChange(generateGalaxy);
-
-gui
-  .add(galaxyParameters, 'size')
-  .min(0.001)
-  .max(0.1)
-  .step(0.001)
   .onFinishChange(generateGalaxy);
 
 gui
