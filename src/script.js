@@ -49,6 +49,7 @@ const generateGalaxy = () => {
   const positions = new Float32Array(galaxyParameters.count * 3);
   const colors = new Float32Array(galaxyParameters.count * 3); // color attribute also needs 3 values - rgb
   const scales = new Float32Array(galaxyParameters.count * 1);
+  const randomness = new Float32Array(galaxyParameters.count * 3);
 
   const insideColor = new THREE.Color(galaxyParameters.insideColor);
   const outsideColor = new THREE.Color(galaxyParameters.outsideColor);
@@ -64,6 +65,11 @@ const generateGalaxy = () => {
       Math.PI *
       2;
 
+    positions[i3] = Math.cos(branchAngle + spinAngle) * radius;
+    positions[i3 + 1] = 0;
+    positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius;
+
+    // Randomness
     const randomX =
       Math.pow(Math.random(), galaxyParameters.randomnessPower) *
       (Math.random() < 0.5 ? 1 : -1); // ternary operator was used to randomly make this value positive or negative, else all values would be positive
@@ -74,9 +80,9 @@ const generateGalaxy = () => {
       Math.pow(Math.random(), galaxyParameters.randomnessPower) *
       (Math.random() < 0.5 ? 1 : -1);
 
-    positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-    positions[i3 + 1] = randomY;
-    positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+    randomness[i3] = randomX;
+    randomness[i3 + 1] = randomY;
+    randomness[i3 + 2] = randomZ;
 
     // Color
     // lerp -> lerp will take the base color, then take it's first argument and interpolate between the two, depending on the second arguments value.
@@ -99,6 +105,8 @@ const generateGalaxy = () => {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1)); // 'a' for attribute
+  geometry.setAttribute('aRandomness', new THREE.BufferAttribute(randomness, 3));
+  
 
   // Material
   material = new THREE.ShaderMaterial({
