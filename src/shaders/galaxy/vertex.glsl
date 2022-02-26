@@ -2,6 +2,8 @@ uniform float uSize;
 
 attribute float aScale;
 
+varying vec3 vColor;
+
 void main() {
   // Position
   vec4 modelPosition = modelMatrix * vec4(position, 1.0);
@@ -15,4 +17,7 @@ void main() {
 
   // Add size attenuation - particles close to camera are bigger, particles further are smaller -> simulates perspective
   gl_PointSize *= ( 1.0 / - viewPosition.z );
+
+  // Color
+  vColor = color;
 }
